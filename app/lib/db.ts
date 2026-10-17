@@ -3,7 +3,7 @@ export type Project = {
   id: string; title: string; description: string; tags: string[];
   live_url: string | null; repo_url: string | null; image_url: string | null; created_at: string;
 };
-export type Card = Pick<Project, "id" | "title" | "description" | "tags" | "image_url">;
+export type Card = Pick<Project, "id" | "title" | "description" | "tags" | "image_url" | "live_url">;
 
 const url = process.env.SUPABASE_URL;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY;

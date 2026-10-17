@@ -14,9 +14,11 @@ export default function ProjectCard({ p, n }: { p: Card; n: number }) {
         <h3>{p.title}</h3>
         <p>{desc}</p>
         {p.tags.length > 0 && <div className="tags">{p.tags.map((t) => (<span className="tag" key={t}>{t}</span>))}</div>}
-        {p.id && <span className="pcard-link">Ver projeto <Icon name="arrow" size={14} /></span>}
+        {(p.id || p.live_url) && <span className="pcard-link">{p.id ? "Ver projeto" : "Ver site"} <Icon name="arrow" size={14} /></span>}
       </div>
     </>
   );
-  return p.id ? <a className="pcard" href={`/projetos/${p.id}`}>{body}</a> : <article className="pcard">{body}</article>;
+  if (p.id) return <a className="pcard" href={`/projetos/${p.id}`}>{body}</a>;
+  if (p.live_url) return <a className="pcard" href={p.live_url} target="_blank" rel="noopener noreferrer">{body}</a>;
+  return <article className="pcard">{body}</article>;
 }

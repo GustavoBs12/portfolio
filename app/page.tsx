@@ -13,7 +13,7 @@ const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
 export default async function Home() {
   const db = await listProjects();
   const items = db.length ? db : samples;
-  const cards = items.slice(0, 6).map(({ id, title, description, tags, image_url }) => ({ id, title, description, tags, image_url }));
+  const cards = items.slice(0, 6).map(({ id, title, description, tags, image_url, live_url }) => ({ id, title, description, tags, image_url, live_url }));
 
   const stats = [
     { icon: "cap", value: "ADS", label: "Graduação concluída" },
