@@ -35,9 +35,11 @@ export async function POST(req: Request) {
   if (mensagem.length < 10 || mensagem.length > 2000)
     return NextResponse.json({ error: "A mensagem deve ter entre 10 e 2000 caracteres." }, { status: 400 });
 
-  const key = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_TO_EMAIL;
-  if (!key || !to) return NextResponse.json({ error: "Envio não configurado no servidor." }, { status: 500 });
+  const key = process.env.RESEND_API_KEY?.trim();
+  const to = process.env.CONTACT_TO_EMAIL?.trim();
+  // Diz qual variável falta (só o nome, nunca o valor) para facilitar a configuração na Vercel.
+  const missing = [!key && "RESEND_API_KEY", !to && "CONTACT_TO_EMAIL"].filter(Boolean).join(" e ");
+  if (missing) return NextResponse.json({ error: `Envio não configurado no servidor (falta ${missing}).` }, { status: 500 });
 
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -51,6 +53,10 @@ export async function POST(req: Request) {
     }),
   });
 
-  if (!res.ok) return NextResponse.json({ error: "Não foi possível enviar agora. Tente de novo." }, { status: 502 });
+  if (!res.ok) {
+    // Aparece em Vercel > Logs. Ex.: chave inválida ou destino diferente do e-mail da conta Resend.
+    console.error("Resend recusou o envio:", res.status, await res.text());
+    return NextResponse.json({ error: "Não foi possível enviar agora. Tente de novo." }, { status: 502 });
+  }
   return NextResponse.json({ ok: true });
 }
