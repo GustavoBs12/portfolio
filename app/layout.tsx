@@ -8,10 +8,17 @@ import { SITE } from "./site";
 
 const font = Plus_Jakarta_Sans({ subsets: ["latin"], display: "swap" });
 
+const SITE_URL = "https://portfolio-seven-flax-99.vercel.app";
+const TITLE = `${SITE.name} | Desenvolvedor Full Stack`;
+const DESCRIPTION =
+  "Desenvolvedor formado em ADS, pós-graduando em Engenharia de Software. Crio sites e sistemas web sob medida.";
+
 export const metadata: Metadata = {
-  title: { default: `${SITE.name} | Desenvolvedor Full Stack`, template: `%s | ${SITE.name}` },
-  description:
-    "Desenvolvedor formado em ADS, pós-graduando em Engenharia de Software. Crio sites e sistemas web sob medida.",
+  metadataBase: new URL(SITE_URL),
+  title: { default: TITLE, template: `%s | ${SITE.name}` },
+  description: DESCRIPTION,
+  openGraph: { type: "website", locale: "pt_BR", siteName: SITE.name, url: "/", title: TITLE, description: DESCRIPTION },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
